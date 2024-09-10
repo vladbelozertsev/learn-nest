@@ -1,6 +1,6 @@
-import { FlowersModule } from './flowers/flowers.module';
+import { FlowersModule } from '../modules/flowers/flowers.module';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { MyMiddleware } from './conception/my-middleware';
+import { MyMiddleware } from './my-middleware';
 
 @Module({
   imports: [FlowersModule],

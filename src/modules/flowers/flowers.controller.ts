@@ -1,8 +1,8 @@
 import * as Nest from '@nestjs/common';
 import { FlowersService } from './flowers.service';
-import { MyGuard } from 'src/conception/my-guard';
-import { MyInterceptor } from 'src/conception/my-interceptor';
-import { MyPipe } from 'src/conception/my-pipe';
+import { MyGuard } from './my-guard';
+import { MyInterceptor } from './my-interceptor';
+import { MyPipe } from './my-pipe';
 
 @Nest.Controller('flowers')
 @Nest.UseInterceptors(MyInterceptor)
