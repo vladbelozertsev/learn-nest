@@ -31,6 +31,24 @@ bootstrap();
  * 6. Создать модели в файле schema.prisma
  * 7. Запушить модели в бд: npx prisma db push
  *
- * https://github.com/nestjs/nest-cli/issues/2166
+ * Структура проекта:
+ * 1. auth - логика по аутентификации
+ * 2. common - общая ?
+ * 3. config - конфигурация для .env файла
+ * 4. entity - работа с бд
+ * 5. main - папка с конревыми файлами неста (добавлена мной для удобства)
+ * 6. modules - модули nest (контролеры сервисы и тд)
+ * 7 shared - ???
  *
+ * Декораторы:
+ * 1. Класса - может устанавиливать новые св-ва создаваемому объекту
+ * 2. Метода - может устанавливать св-ва дескриптора: writable, enumerable, configurable.
+ * 3. Свойства - может добавлять метаданные для св-ва (при помощи библ reflect-metadata)
+ * 4. Параметра - применяется в методе класса или конструкторе, может добавлять метаданные для параметра (при помощи библ reflect-metadata)
+ *
+ * Полезные ссылки:
+ * https://stackoverflow.com/questions/42201032/typescript-why-am-i-able-to-modify-readonly-property-in-constructor - про private
+ * https://github.com/nestjs/nest-cli/issues/2166 - перенос main.ts файла в нужную папку (main в данном приложении)
+ * https://www.typescriptlang.org/docs/handbook/decorators.html#metadata - декораторы
+ * https://github.com/CatsMiaow/nestjs-project-structure - структура проекта NestJS
  **/

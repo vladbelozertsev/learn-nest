@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/main/prisma.service';
+import { FlowersCreatedDto } from './flowers.dto';
 
 @Injectable()
 export class FlowersService {
@@ -7,10 +8,8 @@ export class FlowersService {
 
   getAll() {
     return this.prisma.flower.findMany();
-    // return [
-    //   { name: 'rose', color: 'red', price: 50 },
-    //   { name: 'tulip', color: 'white', price: 75 },
-    //   { name: 'orchid', color: 'violet', price: 25 },
-    // ];
+  }
+  create(data: FlowersCreatedDto) {
+    return this.prisma.flower.create({ data });
   }
 }
