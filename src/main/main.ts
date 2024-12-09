@@ -50,5 +50,11 @@ bootstrap();
  * https://stackoverflow.com/questions/42201032/typescript-why-am-i-able-to-modify-readonly-property-in-constructor - про private
  * https://github.com/nestjs/nest-cli/issues/2166 - перенос main.ts файла в нужную папку (main в данном приложении)
  * https://www.typescriptlang.org/docs/handbook/decorators.html#metadata - декораторы
- * https://github.com/CatsMiaow/nestjs-project-structure - структура проекта NestJS
+ *
+ * Структура проекта NestJS:
+ * https://github.com/CatsMiaow/nestjs-project-structure -
+ * https://www.reddit.com/r/typescript/comments/pvel5i/domaindriven_hexagon_ddd_architecture_best/
+ * https://dev.to/bendix/applying-domain-driven-design-principles-to-a-nest-js-project-5f7b
+ * https://www.geeksforgeeks.org/folder-structure-of-a-nestjs-project/
+ * https://github.com/Sairyss/domain-driven-hexagon
  **/
