@@ -1,7 +1,7 @@
 import * as Nest from '@nestjs/common';
 import { FlowerAddDTO } from './dtos/flower-add.dto';
 import { FlowersService } from './flowers.service';
-import { MyGuard } from '../../app/guards/my-guard';
+import { MyGuard } from './guards/my-guard';
 import { MyInterceptor } from './interceptors/my-interceptor';
 import { MyPipe } from './pipes/my-pipe';
 

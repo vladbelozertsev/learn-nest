@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/app/prisma.service';
-import { FlowersCreatedDto } from './flowers.dto';
+import { FlowerAddDTO } from './dtos/flower-add.dto';
 import { ConfigService } from '@nestjs/config';
 import { AppMode } from 'src/types/mode';
 
@@ -15,7 +15,7 @@ export class FlowersService {
     console.log(this.config.get<AppMode>('MODE'));
     return this.prisma.flower.findMany();
   }
-  create(data: FlowersCreatedDto) {
+  create(data: FlowerAddDTO) {
     return this.prisma.flower.create({ data });
   }
 }
