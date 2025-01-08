@@ -1,9 +1,9 @@
 import * as Nest from '@nestjs/common';
+import { FlowerAddDTO } from './dtos/flower-add.dto';
 import { FlowersService } from './flowers.service';
-import { MyGuard } from './my-guard';
-import { MyInterceptor } from './my-interceptor';
-import { MyPipe } from './my-pipe';
-import { FlowersCreatedDto } from './flowers.dto';
+import { MyGuard } from '../../app/guards/my-guard';
+import { MyInterceptor } from './interceptors/my-interceptor';
+import { MyPipe } from './pipes/my-pipe';
 
 @Nest.Controller('flowers')
 @Nest.UseInterceptors(MyInterceptor)
@@ -19,8 +19,9 @@ export class FlowersController {
 
   @Nest.Post()
   @Nest.UseGuards(MyGuard)
-  @Nest.UsePipes(new Nest.ValidationPipe()) // dto Validation
-  create(@Nest.Body() dto: FlowersCreatedDto) {
+  // @Nest.UsePipes(new Nest.ValidationPipe()) // dto Validation // moved to main.ts
+  create(@Nest.Body() dto: FlowerAddDTO) {
+    console.log(dto);
     return this.flowersService.create(dto);
   }
 }

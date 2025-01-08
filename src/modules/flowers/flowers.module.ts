@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
-import { FlowersService } from './flowers.service';
+import { ConfigService } from '@nestjs/config';
 import { FlowersController } from './flowers.controller';
-import { PrismaService } from 'src/main/prisma.service';
+import { FlowersService } from './flowers.service';
+import { Module } from '@nestjs/common';
+import { PrismaService } from 'src/app/prisma.service';
 
 @Module({
   controllers: [FlowersController],
-  providers: [FlowersService, PrismaService],
+  providers: [FlowersService, PrismaService, ConfigService],
 })
 export class FlowersModule {}

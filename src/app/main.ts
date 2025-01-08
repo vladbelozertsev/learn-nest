@@ -1,8 +1,12 @@
-import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import { MyGuard } from './guards/my-guard';
+import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.useGlobalGuards(new MyGuard());
+  app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
   await app.listen(3000);
 }
@@ -50,6 +54,7 @@ bootstrap();
  * https://stackoverflow.com/questions/42201032/typescript-why-am-i-able-to-modify-readonly-property-in-constructor - про private
  * https://github.com/nestjs/nest-cli/issues/2166 - перенос main.ts файла в нужную папку (main в данном приложении)
  * https://www.typescriptlang.org/docs/handbook/decorators.html#metadata - декораторы
+ * https://www.reddit.com/r/nestjs/comments/1fwl96f/what_folder_structure_do_you_use/?rdt=49398 - структура
  *
  * Структура проекта NestJS:
  * https://github.com/CatsMiaow/nestjs-project-structure -
