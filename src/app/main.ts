@@ -1,14 +1,35 @@
+import * as admin from 'firebase-admin';
+import * as pf from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
+import { ConfigService } from '@nestjs/config';
+import { MICRO_SERVICE_OPTIONS } from 'src/helpers/consts';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { MyGuard } from './guards/my-guard';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<pf.NestFastifyApplication>(AppModule, new pf.FastifyAdapter());
+  const config = app.get<ConfigService>(ConfigService);
+
+  admin.initializeApp({
+    credential: admin.credential.cert({
+      projectId: config.get('FIREBASE_PROJECT_ID'),
+      clientEmail: config.get('FIREBASE_CLIENT_EMAIL'),
+      privateKey: config.get('FIREBASE_PRIVATE_KEY').replace(/\\n/g, '\n'),
+    }),
+  });
+
   app.useGlobalGuards(new MyGuard());
   app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
   await app.listen(3000);
+
+  const microservice = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+    transport: Transport.TCP,
+    options: MICRO_SERVICE_OPTIONS,
+  });
+  await microservice.listen();
 }
 bootstrap();
 
@@ -62,4 +83,7 @@ bootstrap();
  * https://dev.to/bendix/applying-domain-driven-design-principles-to-a-nest-js-project-5f7b
  * https://www.geeksforgeeks.org/folder-structure-of-a-nestjs-project/
  * https://github.com/Sairyss/domain-driven-hexagon
+ *
+ * Прочее
+ * https://stackoverflow.com/questions/64710499/integrate-firebase-notificaiton-in-nest-js - config
  **/

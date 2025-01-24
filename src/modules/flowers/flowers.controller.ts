@@ -24,4 +24,7 @@ export class FlowersController {
     console.log(dto);
     return this.flowersService.create(dto);
   }
+
+  @Nest.Get('new-order')
+  newOrder() {}
 }
