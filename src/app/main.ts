@@ -2,9 +2,6 @@ import * as admin from 'firebase-admin';
 import * as pf from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { MICRO_SERVICE_OPTIONS } from 'src/helpers/consts';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
-import { MyGuard } from './guards/my-guard';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 
@@ -20,16 +17,9 @@ async function bootstrap() {
     }),
   });
 
-  app.useGlobalGuards(new MyGuard());
-  app.useGlobalPipes(new ValidationPipe());
   app.setGlobalPrefix('api');
+  app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
-
-  const microservice = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
-    transport: Transport.TCP,
-    options: MICRO_SERVICE_OPTIONS,
-  });
-  await microservice.listen();
 }
 bootstrap();
 
@@ -84,6 +74,17 @@ bootstrap();
  * https://www.geeksforgeeks.org/folder-structure-of-a-nestjs-project/
  * https://github.com/Sairyss/domain-driven-hexagon
  *
+ * Призма генерация DTO
+ * https://stackoverflow.com/questions/76978671/nestjs-and-prisma-do-we-really-need-dtos-for-validation-when-we-could-use-prism
+ * https://www.prisma.io/docs/orm/prisma-schema/overview/generators
+ * https://github.com/unlight/prisma-nestjs-graphql
+ *
+ * JWT настройка + прочее
+ * https://www.youtube.com/watch?v=S8Cjx5ua2JU - passport + refresh
+ * https://www.youtube.com/watch?v=XPSSgAPjTb4 - graphql
+ * https://stackoverflow.com/questions/71785164/is-it-possible-to-have-multiple-local-strategies-in-passport-implemented-with-ne
+ *
  * Прочее
  * https://stackoverflow.com/questions/64710499/integrate-firebase-notificaiton-in-nest-js - config
+ * https://stackoverflow.com/questions/69907142/is-there-a-native-method-in-nestjs-to-decode-jwt
  **/

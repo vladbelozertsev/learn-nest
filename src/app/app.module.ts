@@ -1,34 +1,22 @@
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { Module } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { CarsModule } from 'src/Ω/cars/cars.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { FlowersModule } from '../modules/flowers/flowers.module';
-import { MICRO_SERVICE_OPTIONS } from 'src/helpers/consts';
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { MyMicroServiceModule } from 'src/modules/my-micro-service/my-micro-service.module';
-import { MyMiddleware } from 'src/middlewares/my-middleware';
-import { PushModule } from 'src/modules/push/push.module';
+import { AuthModule } from 'src/Ω/auth/auth.module';
+import { UsersModule } from 'src/Ω/users/users.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
-    FlowersModule,
-    PushModule,
-    MyMicroServiceModule,
-    ClientsModule.register([
-      {
-        name: 'ORDER_SERVICE',
-        transport: Transport.TCP,
-        options: MICRO_SERVICE_OPTIONS,
-      },
-    ]),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: true,
+    }),
+    AuthModule,
+    UsersModule,
+    CarsModule,
   ],
-  controllers: [AppController],
-  providers: [ConfigService, AppService],
+  providers: [ConfigService],
 })
-export class AppModule implements NestModule {
-  constructor() {}
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(MyMiddleware).forRoutes('flowers');
-  }
-}
+export class AppModule {}
