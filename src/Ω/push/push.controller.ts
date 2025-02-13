@@ -7,13 +7,11 @@ export class PushController {
   constructor(private readonly pushService: PushService) {}
   @Nest.Get()
   Ok() {
-    console.log('asdasdasd');
     return 'OK';
   }
 
   @Nest.Post()
   async pushSend(@Nest.Body() dto: PushSendDTO) {
-    console.log(dto);
     const msg = await this.pushService.send(dto);
     return msg;
   }

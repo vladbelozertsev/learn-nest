@@ -17,7 +17,7 @@ export class UserOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     email?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
+    @HideField()
     emailVerified?: `${SortOrder}`;
 
     @Field(() => SortOrder, {nullable:true})
@@ -29,10 +29,10 @@ export class UserOrderByWithAggregationInput {
     @HideField()
     refreshToken?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
+    @HideField()
     createdAt?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
+    @HideField()
     updatedAt?: `${SortOrder}`;
 
     @Field(() => UserCountOrderByAggregateInput, {nullable:true})

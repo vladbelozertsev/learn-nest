@@ -13,7 +13,6 @@ export class FlowersController {
   @Nest.Get('')
   @Nest.UseGuards(MyGuard)
   getAll(@Nest.Query('pageNumber', MyPipe) pageNumber: number) {
-    console.log(pageNumber);
     return this.flowersService.getAll();
   }
 

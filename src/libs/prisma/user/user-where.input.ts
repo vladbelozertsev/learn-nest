@@ -24,7 +24,7 @@ export class UserWhereInput {
     @Field(() => StringFilter, {nullable:true})
     email?: StringFilter;
 
-    @Field(() => BoolFilter, {nullable:true})
+    @HideField()
     emailVerified?: BoolFilter;
 
     @Field(() => StringFilter, {nullable:true})
@@ -36,9 +36,9 @@ export class UserWhereInput {
     @HideField()
     refreshToken?: StringFilter;
 
-    @Field(() => DateTimeFilter, {nullable:true})
+    @HideField()
     createdAt?: DateTimeFilter;
 
-    @Field(() => DateTimeFilter, {nullable:true})
+    @HideField()
     updatedAt?: DateTimeFilter;
 }

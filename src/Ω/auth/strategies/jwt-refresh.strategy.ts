@@ -1,10 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { FastifyRequest } from 'fastify';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, ExtractJwt } from 'passport-jwt';
-import { FastifyRequest } from 'fastify';
 import { Token } from '../types/token.type';
 import { UsersService } from 'src/Ω/users/users.service';
+import { compare } from 'bcrypt';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh') {
@@ -18,13 +19,16 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
       passReqToCallback: true,
     });
   }
-  async validate(req: FastifyRequest, token: Token) {
-    console.log('validate', token.email);
-    const now = Math.round(Date.now() / 1000);
+  async validate(req: FastifyRequest, { id, iat }: Token) {
+    const tokenEncodedReq = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
+    const tokenEncodedDbHash = (await this.$users.findUser({ id })).refreshToken;
+    const isValid = await compare(tokenEncodedReq, tokenEncodedDbHash);
+    if (!isValid) throw new UnauthorizedException('INVALID_TOKEN');
     const time = this.$config.getOrThrow('JWT_ACCESS_TOKEN_LIFE_TIME_S');
-    const isAccessTokenExpired = now - token.iat > time;
-    if (isAccessTokenExpired) return { req, refreshToken: token };
-    await this.$users.updateUser({ data: { refreshToken: { set: '' } }, where: { id: token.id } });
-    throw new UnauthorizedException('SUSPICIOUS_ACTIVITY');
+    const isAccessTokenExpired = Math.round(Date.now() / 1000) - iat > time;
+    if (!isAccessTokenExpired) throw new UnauthorizedException('SUSPICIOUS_ACTIVITY');
+    return { req };
   }
 }
+
+// https://docs.nestjs.com/recipes/passport#request-scoped-strategies

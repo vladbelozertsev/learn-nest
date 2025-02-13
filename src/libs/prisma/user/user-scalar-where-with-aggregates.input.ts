@@ -24,7 +24,7 @@ export class UserScalarWhereWithAggregatesInput {
     @Field(() => StringWithAggregatesFilter, {nullable:true})
     email?: StringWithAggregatesFilter;
 
-    @Field(() => BoolWithAggregatesFilter, {nullable:true})
+    @HideField()
     emailVerified?: BoolWithAggregatesFilter;
 
     @Field(() => StringWithAggregatesFilter, {nullable:true})
@@ -36,9 +36,9 @@ export class UserScalarWhereWithAggregatesInput {
     @HideField()
     refreshToken?: StringWithAggregatesFilter;
 
-    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
+    @HideField()
     createdAt?: DateTimeWithAggregatesFilter;
 
-    @Field(() => DateTimeWithAggregatesFilter, {nullable:true})
+    @HideField()
     updatedAt?: DateTimeWithAggregatesFilter;
 }

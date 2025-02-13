@@ -11,7 +11,7 @@ export class UserMinAggregateInput {
     @Field(() => Boolean, {nullable:true})
     email?: true;
 
-    @Field(() => Boolean, {nullable:true})
+    @HideField()
     emailVerified?: true;
 
     @Field(() => Boolean, {nullable:true})
@@ -23,9 +23,9 @@ export class UserMinAggregateInput {
     @HideField()
     refreshToken?: true;
 
-    @Field(() => Boolean, {nullable:true})
+    @HideField()
     createdAt?: true;
 
-    @Field(() => Boolean, {nullable:true})
+    @HideField()
     updatedAt?: true;
 }

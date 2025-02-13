@@ -1,10 +1,11 @@
 import { ConfigService } from '@nestjs/config';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { LoginInput } from './dto/login.dto';
-import { UsersService } from '../users/users.service';
-import { delkeys } from 'src/libs/utils/helpers';
 import { TokenPayload } from './types/token.type';
+import { UpdateOneUserArgs } from 'src/libs/prisma/user/update-one-user.args';
+import { UsersService } from '../users/users.service';
+import { compare } from 'bcrypt';
+import { delkeys } from 'src/libs/utils/helpers';
 
 @Injectable()
 export class AuthService {
@@ -15,7 +16,7 @@ export class AuthService {
   ) {}
   getAccessToken(data: TokenPayload) {
     return this.$jwt.sign(
-      { id: data.id, email: data.email },
+      { id: data.id },
       {
         secret: this.$config.getOrThrow('JWT_ACCESS_SECRET'),
         expiresIn: this.$config.getOrThrow('JWT_ACCESS_TOKEN_LIFE_TIME_S') + 's',
@@ -25,7 +26,7 @@ export class AuthService {
 
   getRefreshToken(data: TokenPayload) {
     return this.$jwt.sign(
-      { id: data.id, email: data.email },
+      { id: data.id },
       {
         secret: this.$config.getOrThrow('JWT_REFRESH_SECRET'),
         expiresIn: this.$config.getOrThrow('JWT_REFRESH_TOKEN_LIFE_TIME_S') + 's',
@@ -34,9 +35,11 @@ export class AuthService {
   }
 
   // LOGIN_STEP_#3
-  async validateUser({ email, password }: LoginInput) {
-    const user = await this.$users.findUser({ email });
-    if (!user || user.password !== password) return null;
-    return delkeys(user, ['password']);
+  async validateUser(input: { where: UpdateOneUserArgs['where']; password: string }) {
+    const user = await this.$users.findUser(input.where);
+    if (!user) throw new UnauthorizedException('INCORRECT_EMAIL');
+    const isValid = await compare(input.password, user.password);
+    if (!isValid) throw new UnauthorizedException('INCORRECT_PASSWORD');
+    return delkeys(user, ['password', 'refreshToken']);
   }
 }

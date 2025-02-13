@@ -12,6 +12,7 @@ import { UsersModule } from 'src/Ω/users/users.module';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: true,
+      context: (...args) => ({ ctx: args }),
     }),
     AuthModule,
     UsersModule,

@@ -12,7 +12,7 @@ export class UserMaxOrderByAggregateInput {
     @Field(() => SortOrder, {nullable:true})
     email?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
+    @HideField()
     emailVerified?: `${SortOrder}`;
 
     @Field(() => SortOrder, {nullable:true})
@@ -24,9 +24,9 @@ export class UserMaxOrderByAggregateInput {
     @HideField()
     refreshToken?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
+    @HideField()
     createdAt?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
+    @HideField()
     updatedAt?: `${SortOrder}`;
 }

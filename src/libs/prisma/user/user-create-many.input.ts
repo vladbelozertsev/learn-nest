@@ -14,7 +14,7 @@ export class UserCreateManyInput {
     @V.IsEmail()
     email!: string;
 
-    @Field(() => Boolean, {nullable:true})
+    @HideField()
     emailVerified?: boolean;
 
     @Field(() => String, {nullable:false})
@@ -26,9 +26,9 @@ export class UserCreateManyInput {
     @HideField()
     refreshToken?: string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     createdAt?: Date | string;
 
-    @Field(() => Date, {nullable:true})
+    @HideField()
     updatedAt?: Date | string;
 }

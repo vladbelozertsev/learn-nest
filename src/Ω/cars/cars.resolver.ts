@@ -3,7 +3,7 @@
 import { CarsService } from './cars.service';
 // import { FindManyCarArgs } from 'src/libs/prisma/car/find-many-car.args';
 import { FindUniqueCarArgs } from 'src/libs/prisma/car/find-unique-car.args';
-import { Args, Resolver, Query, Mutation, Context } from '@nestjs/graphql';
+import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
 import { Car } from 'src/libs/prisma/car/car.model';
 import { CarCreateInput } from 'src/libs/prisma/car/car-create.input';
 import { FindManyCarArgs } from 'src/libs/prisma/car/find-many-car.args';
@@ -22,8 +22,7 @@ export class CarsResolver {
 
   @Query(() => [Car])
   @UseGuards(JwtAuthGuard)
-  cars(@Args() args: FindManyCarArgs, @Context() ctx) {
-    console.log(ctx.req.headers);
+  cars(@Args() args: FindManyCarArgs) {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(this.carsService.findAll(args));

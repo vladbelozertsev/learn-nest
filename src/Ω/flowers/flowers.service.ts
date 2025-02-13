@@ -11,7 +11,6 @@ export class FlowersService {
   ) {}
 
   getAll() {
-    console.log(this.config.getOrThrow('MODE'));
     return this.prisma.flower.findMany();
   }
   create(data: FlowerAddDTO) {

@@ -5,7 +5,7 @@ import { Strategy } from 'passport-local';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
-  constructor(private authService: AuthService) {
+  constructor(private readonly $auth: AuthService) {
     // passport strategy tries to find this fields in req.body
     // property that we add by first step (gql-auth.guard.ts)
     super({ usernameField: 'email', passwordField: 'password' });
@@ -16,8 +16,8 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     const isEmail = !!email && typeof email === 'string';
     const isPass = !!password && typeof password === 'string';
     if (!isEmail || !isPass) throw new UnauthorizedException('DATA_NOT_PROVIDED');
-    const user = await this.authService.validateUser({ email, password });
-    if (!user) throw new UnauthorizedException('INCORRECT_INPUT');
+    const user = await this.$auth.validateUser({ email, password });
+    // if (!user) throw new UnauthorizedException('INCORRECT_INPUT');
     // if (!user.emailVerified) throw new UnauthorizedException('EMAIL_NOT_VERIFIED');
     return user;
   }

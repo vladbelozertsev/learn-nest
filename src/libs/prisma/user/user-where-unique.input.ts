@@ -4,8 +4,8 @@ import { Int } from '@nestjs/graphql';
 import * as V from 'class-validator';
 import { UserWhereInput } from './user-where.input';
 import { BoolFilter } from '../prisma/bool-filter.input';
-import { StringFilter } from '../prisma/string-filter.input';
 import { HideField } from '@nestjs/graphql';
+import { StringFilter } from '../prisma/string-filter.input';
 import { DateTimeFilter } from '../prisma/date-time-filter.input';
 
 @InputType()
@@ -27,7 +27,7 @@ export class UserWhereUniqueInput {
     @Field(() => [UserWhereInput], {nullable:true})
     NOT?: Array<UserWhereInput>;
 
-    @Field(() => BoolFilter, {nullable:true})
+    @HideField()
     emailVerified?: BoolFilter;
 
     @Field(() => StringFilter, {nullable:true})
@@ -39,9 +39,9 @@ export class UserWhereUniqueInput {
     @HideField()
     refreshToken?: StringFilter;
 
-    @Field(() => DateTimeFilter, {nullable:true})
+    @HideField()
     createdAt?: DateTimeFilter;
 
-    @Field(() => DateTimeFilter, {nullable:true})
+    @HideField()
     updatedAt?: DateTimeFilter;
 }

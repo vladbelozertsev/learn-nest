@@ -15,7 +15,7 @@ export class UserUncheckedUpdateInput {
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
     email?: StringFieldUpdateOperationsInput;
 
-    @Field(() => BoolFieldUpdateOperationsInput, {nullable:true})
+    @HideField()
     emailVerified?: BoolFieldUpdateOperationsInput;
 
     @Field(() => StringFieldUpdateOperationsInput, {nullable:true})
@@ -27,9 +27,9 @@ export class UserUncheckedUpdateInput {
     @HideField()
     refreshToken?: StringFieldUpdateOperationsInput;
 
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    @HideField()
     createdAt?: DateTimeFieldUpdateOperationsInput;
 
-    @Field(() => DateTimeFieldUpdateOperationsInput, {nullable:true})
+    @HideField()
     updatedAt?: DateTimeFieldUpdateOperationsInput;
 }
