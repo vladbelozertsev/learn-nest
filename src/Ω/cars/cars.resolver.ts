@@ -1,28 +1,28 @@
-// import { Car } from 'src/libs/prisma/car/car.model';
-// import { CarCreateInput } from 'src/libs/prisma/car/car-create.input';
-import { CarsService } from './cars.service';
-// import { FindManyCarArgs } from 'src/libs/prisma/car/find-many-car.args';
-import { FindUniqueCarArgs } from 'src/libs/prisma/car/find-unique-car.args';
-import { Args, Resolver, Query, Mutation } from '@nestjs/graphql';
+import * as Gql from '@nestjs/graphql';
 import { Car } from 'src/libs/prisma/car/car.model';
 import { CarCreateInput } from 'src/libs/prisma/car/car-create.input';
+import { CarsService } from './cars.service';
 import { FindManyCarArgs } from 'src/libs/prisma/car/find-many-car.args';
+import { FindUniqueCarArgs } from 'src/libs/prisma/car/find-unique-car.args';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { UpdateOneCarArgs } from 'src/libs/prisma/car/update-one-car.args';
 import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+// import { Car } from 'src/libs/prisma/car/car.model';
+// import { CarCreateInput } from 'src/libs/prisma/car/car-create.input';
+// import { FindManyCarArgs } from 'src/libs/prisma/car/find-many-car.args';
 
-@Resolver()
+@Gql.Resolver()
 export class CarsResolver {
   constructor(private readonly carsService: CarsService) {}
 
-  @Mutation(() => Car)
-  createCar(@Args('input') input: CarCreateInput) {
+  @Gql.Mutation(() => Car)
+  createCar(@Gql.Args('input') input: CarCreateInput) {
     return this.carsService.create(input);
   }
 
-  @Query(() => [Car])
+  @Gql.Query(() => [Car])
   @UseGuards(JwtAuthGuard)
-  cars(@Args() args: FindManyCarArgs) {
+  cars(@Gql.Args() args: FindManyCarArgs) {
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve(this.carsService.findAll(args));
@@ -31,13 +31,13 @@ export class CarsResolver {
     // return this.carsService.findAll(input);
   }
 
-  @Query(() => Car)
-  car(@Args() args: FindUniqueCarArgs) {
+  @Gql.Query(() => Car)
+  car(@Gql.Args() args: FindUniqueCarArgs) {
     return this.carsService.findOne(args.where);
   }
 
-  @Mutation(() => Car)
-  updateCar(@Args() args: UpdateOneCarArgs) {
+  @Gql.Mutation(() => Car)
+  updateCar(@Gql.Args() args: UpdateOneCarArgs) {
     return this.carsService.update(args);
   }
 

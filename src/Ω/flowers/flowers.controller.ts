@@ -11,8 +11,8 @@ export class FlowersController {
   constructor(private readonly flowersService: FlowersService) {}
 
   @Nest.Get('')
-  @Nest.UseGuards(MyGuard)
-  getAll(@Nest.Query('pageNumber', MyPipe) pageNumber: number) {
+  // @Nest.UseGuards(MyGuard)
+  getAll(@Nest.Query('pageNumber') pageNumber: number) {
     return this.flowersService.getAll();
   }
 

@@ -12,22 +12,33 @@ generator nestgraphql {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_URL_DEV")
 }
 
 model User {
   id            Int      @id @default(autoincrement())
+
   /// @V.IsEmail()
+  /// @HideField({ output: false, input: true })
   email         String   @unique
+
   /// @HideField({ output: false, input: true })
   emailVerified Boolean  @default(false)
-  /// @HideField()
+
+  /// @HideField({ output: true, input: true })
   password      String
+
   name          String
+
+  /// @HideField({ output: true, input: true })
+  role      String       @default("user")
+
   /// @HideField({ output: true, input: true })
   refreshToken  String   @default("")
+
   /// @HideField({ output: false, input: true })
   createdAt     DateTime @default(now())
+  
   /// @HideField({ output: false, input: true })
   updatedAt     DateTime @updatedAt
 }

@@ -14,13 +14,13 @@ export class UserOrderByWithAggregationInput {
     @Field(() => SortOrder, {nullable:true})
     id?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
+    @HideField()
     email?: `${SortOrder}`;
 
     @HideField()
     emailVerified?: `${SortOrder}`;
 
-    @Field(() => SortOrder, {nullable:true})
+    @HideField()
     password?: `${SortOrder}`;
 
     @Field(() => SortOrder, {nullable:true})

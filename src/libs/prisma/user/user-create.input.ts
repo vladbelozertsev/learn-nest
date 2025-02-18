@@ -1,19 +1,17 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
-import * as V from 'class-validator';
 import { HideField } from '@nestjs/graphql';
 
 @InputType()
 export class UserCreateInput {
 
-    @Field(() => String, {nullable:false})
-    @V.IsEmail()
+    @HideField()
     email!: string;
 
     @HideField()
     emailVerified?: boolean;
 
-    @Field(() => String, {nullable:false})
+    @HideField()
     password!: string;
 
     @Field(() => String, {nullable:false})

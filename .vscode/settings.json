@@ -11,6 +11,10 @@
     {
       "filePath": "src/__libs__",
       "group": "Default"
+    },
+    {
+      "filePath": "src/i18n/asd.json",
+      "group": "Default"
     }
   ]
 }

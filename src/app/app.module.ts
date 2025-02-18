@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
-import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { AuthModule } from 'src/Ω/auth/auth.module';
 import { CarsModule } from 'src/Ω/cars/cars.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AuthModule } from 'src/Ω/auth/auth.module';
+import { FlowersModule } from 'src/Ω/flowers/flowers.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { Module } from '@nestjs/common';
 import { UsersModule } from 'src/Ω/users/users.module';
 
 @Module({
@@ -15,6 +16,7 @@ import { UsersModule } from 'src/Ω/users/users.module';
       context: (...args) => ({ ctx: args }),
     }),
     AuthModule,
+    FlowersModule,
     UsersModule,
     CarsModule,
   ],

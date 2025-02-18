@@ -1,3 +1,5 @@
+import { ConfigService } from '@nestjs/config';
+
 export const capitalize = (s: string) => {
   return (s && s[0].toUpperCase() + s.slice(1)) || '';
 };
@@ -15,4 +17,9 @@ export const delkeys = <T extends { [key: string]: any }, Keys extends keyof T>(
 
 export const isObj = (v: any) => {
   return (typeof v === 'object' || typeof v === 'function') && v !== null;
+};
+
+export const isDev = ($config: ConfigService) => {
+  const MODE = $config.getOrThrow('MODE');
+  return MODE === 'DEVELOPMENT';
 };

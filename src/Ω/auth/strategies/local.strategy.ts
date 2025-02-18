@@ -13,12 +13,13 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
 
   // LOGIN_STEP_#2
   async validate(email?: string, password?: string) {
+    console.log('step2');
     const isEmail = !!email && typeof email === 'string';
     const isPass = !!password && typeof password === 'string';
     if (!isEmail || !isPass) throw new UnauthorizedException('DATA_NOT_PROVIDED');
-    const user = await this.$auth.validateUser({ email, password });
-    // if (!user) throw new UnauthorizedException('INCORRECT_INPUT');
-    // if (!user.emailVerified) throw new UnauthorizedException('EMAIL_NOT_VERIFIED');
-    return user;
+    const user = await this.$auth.validateUser({ where: { email }, password });
+    if (user.emailVerified) return user;
+    await this.$auth.verifyEmail(user).catch(console.error);
+    throw new UnauthorizedException('EMAIL_NOT_VERIFIED');
   }
 }

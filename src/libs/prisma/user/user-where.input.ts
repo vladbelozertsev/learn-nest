@@ -2,8 +2,8 @@ import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { IntFilter } from '../prisma/int-filter.input';
 import { StringFilter } from '../prisma/string-filter.input';
-import { BoolFilter } from '../prisma/bool-filter.input';
 import { HideField } from '@nestjs/graphql';
+import { BoolFilter } from '../prisma/bool-filter.input';
 import { DateTimeFilter } from '../prisma/date-time-filter.input';
 
 @InputType()
@@ -21,13 +21,13 @@ export class UserWhereInput {
     @Field(() => IntFilter, {nullable:true})
     id?: IntFilter;
 
-    @Field(() => StringFilter, {nullable:true})
+    @HideField()
     email?: StringFilter;
 
     @HideField()
     emailVerified?: BoolFilter;
 
-    @Field(() => StringFilter, {nullable:true})
+    @HideField()
     password?: StringFilter;
 
     @Field(() => StringFilter, {nullable:true})

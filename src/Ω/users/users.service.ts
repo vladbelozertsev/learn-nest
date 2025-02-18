@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/app/prisma.service';
 import { UpdateOneUserArgs } from 'src/libs/prisma/user/update-one-user.args';
-import { UpdateUserArgs } from './dto/update-user.args';
-import { UpdateUserPasswordArgs } from './dto/update-user-password.args';
-import { UpdateUserTokenArgs } from './dto/update-user-token.args';
 import { UserCreateInput } from 'src/libs/prisma/user/user-create.input';
 import { hash } from 'bcrypt';
 
@@ -16,19 +13,27 @@ export class UsersService {
     return this.$prisma.user.create({ data });
   }
 
-  updateUser(data: UpdateUserArgs) {
+  async updateUserPassword(inp: { id: number; password: string; refreshToken: string }) {
+    const signature = inp.refreshToken.split('.')[2];
+    const refreshToken = await hash(signature, 10).then((set) => ({ set }));
+    const password = await hash(inp.password, 10).then((set) => ({ set }));
+    return this.$prisma.user.update({ where: { id: inp.id }, data: { password, refreshToken } });
+  }
+
+  async updateUserToken({ id, token }: { id: number; token: string }) {
+    const signature = token.split('.')[2];
+    const remove = { refreshToken: { set: '' } };
+    if (!signature) return this.$prisma.user.update({ where: { id }, data: remove });
+    const refreshToken = await hash(signature, 10).then((set) => ({ set }));
+    return this.$prisma.user.update({ where: { id }, data: { refreshToken } });
+  }
+
+  updateUser(data: UpdateOneUserArgs) {
+    delete data['data']['email'];
+    delete data['data']['emailVerified'];
+    delete data['data']['password'];
+    delete data['data']['refreshToken'];
     return this.$prisma.user.update(data);
-  }
-
-  async updateUserPassword({ where, data }: UpdateUserPasswordArgs) {
-    const password = await hash(data.password, 10).then((set) => ({ set }));
-    const refreshToken = await hash(data.refreshToken, 10).then((set) => ({ set }));
-    return this.$prisma.user.update({ where, data: { password, refreshToken } });
-  }
-
-  async updateUserToken({ where, data }: UpdateUserTokenArgs) {
-    const refreshToken = await hash(data.refreshToken, 10).then((set) => ({ set }));
-    return this.$prisma.user.update({ where, data: { refreshToken } });
   }
 
   findUser(where: UpdateOneUserArgs['where']) {

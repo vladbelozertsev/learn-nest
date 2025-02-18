@@ -1,6 +1,6 @@
-import { Module } from '@nestjs/common';
-import { CarsService } from './cars.service';
 import { CarsResolver } from './cars.resolver';
+import { CarsService } from './cars.service';
+import { Module } from '@nestjs/common';
 import { PrismaService } from 'src/app/prisma.service';
 
 @Module({

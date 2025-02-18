@@ -1,10 +1,9 @@
 import { Field } from '@nestjs/graphql';
 import { InputType } from '@nestjs/graphql';
 import { Int } from '@nestjs/graphql';
-import * as V from 'class-validator';
+import { HideField } from '@nestjs/graphql';
 import { UserWhereInput } from './user-where.input';
 import { BoolFilter } from '../prisma/bool-filter.input';
-import { HideField } from '@nestjs/graphql';
 import { StringFilter } from '../prisma/string-filter.input';
 import { DateTimeFilter } from '../prisma/date-time-filter.input';
 
@@ -14,8 +13,7 @@ export class UserWhereUniqueInput {
     @Field(() => Int, {nullable:true})
     id?: number;
 
-    @Field(() => String, {nullable:true})
-    @V.IsEmail()
+    @HideField()
     email?: string;
 
     @Field(() => [UserWhereInput], {nullable:true})
@@ -30,7 +28,7 @@ export class UserWhereUniqueInput {
     @HideField()
     emailVerified?: BoolFilter;
 
-    @Field(() => StringFilter, {nullable:true})
+    @HideField()
     password?: StringFilter;
 
     @Field(() => StringFilter, {nullable:true})
