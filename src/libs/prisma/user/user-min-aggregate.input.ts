@@ -21,6 +21,9 @@ export class UserMinAggregateInput {
     name?: true;
 
     @HideField()
+    role?: true;
+
+    @HideField()
     refreshToken?: true;
 
     @HideField()

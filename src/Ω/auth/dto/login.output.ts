@@ -1,5 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { User } from 'src/libs/prisma/user/user.model';
+import { User } from 'src/Ω/users';
 
 @ObjectType()
 export class LoginOutput {

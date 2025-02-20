@@ -21,6 +21,9 @@ export class UserUpdateInput {
     name?: StringFieldUpdateOperationsInput;
 
     @HideField()
+    role?: StringFieldUpdateOperationsInput;
+
+    @HideField()
     refreshToken?: StringFieldUpdateOperationsInput;
 
     @HideField()

@@ -21,6 +21,9 @@ export class UserMaxAggregateInput {
     name?: true;
 
     @HideField()
+    role?: true;
+
+    @HideField()
     refreshToken?: true;
 
     @HideField()

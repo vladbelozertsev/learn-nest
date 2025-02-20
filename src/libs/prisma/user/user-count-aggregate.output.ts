@@ -22,6 +22,9 @@ export class UserCountAggregate {
     name!: number;
 
     @HideField()
+    role!: number;
+
+    @HideField()
     refreshToken!: number;
 
     @Field(() => Int, {nullable:false})

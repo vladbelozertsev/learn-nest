@@ -25,6 +25,9 @@ export class UserUncheckedUpdateInput {
     name?: StringFieldUpdateOperationsInput;
 
     @HideField()
+    role?: StringFieldUpdateOperationsInput;
+
+    @HideField()
     refreshToken?: StringFieldUpdateOperationsInput;
 
     @HideField()

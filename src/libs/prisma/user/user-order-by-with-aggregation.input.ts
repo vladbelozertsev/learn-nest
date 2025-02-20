@@ -27,6 +27,9 @@ export class UserOrderByWithAggregationInput {
     name?: `${SortOrder}`;
 
     @HideField()
+    role?: `${SortOrder}`;
+
+    @HideField()
     refreshToken?: `${SortOrder}`;
 
     @HideField()

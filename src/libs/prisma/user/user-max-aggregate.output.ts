@@ -22,6 +22,9 @@ export class UserMaxAggregate {
     name?: string;
 
     @HideField()
+    role?: string;
+
+    @HideField()
     refreshToken?: string;
 
     @Field(() => Date, {nullable:true})

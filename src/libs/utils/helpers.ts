@@ -23,3 +23,9 @@ export const isDev = ($config: ConfigService) => {
   const MODE = $config.getOrThrow('MODE');
   return MODE === 'DEVELOPMENT';
 };
+
+export const wset = (prams: { [key: string]: any }) => {
+  const arr = Object.entries(prams);
+  const entries = arr.map((el) => [el[0], { set: el[1] }]);
+  return Object.fromEntries(entries);
+};

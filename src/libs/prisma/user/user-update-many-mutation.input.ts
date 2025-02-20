@@ -21,6 +21,9 @@ export class UserUpdateManyMutationInput {
     name?: StringFieldUpdateOperationsInput;
 
     @HideField()
+    role?: StringFieldUpdateOperationsInput;
+
+    @HideField()
     refreshToken?: StringFieldUpdateOperationsInput;
 
     @HideField()

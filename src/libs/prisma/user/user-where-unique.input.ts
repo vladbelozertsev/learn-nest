@@ -35,6 +35,9 @@ export class UserWhereUniqueInput {
     name?: StringFilter;
 
     @HideField()
+    role?: StringFilter;
+
+    @HideField()
     refreshToken?: StringFilter;
 
     @HideField()

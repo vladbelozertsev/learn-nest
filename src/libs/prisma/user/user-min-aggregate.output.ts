@@ -22,6 +22,9 @@ export class UserMinAggregate {
     name?: string;
 
     @HideField()
+    role?: string;
+
+    @HideField()
     refreshToken?: string;
 
     @Field(() => Date, {nullable:true})

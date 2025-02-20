@@ -2,15 +2,14 @@ import * as Gql from '@nestjs/graphql';
 import { AuthService } from '../auth/auth.service';
 import { ExtractJwt } from 'passport-jwt';
 import { FastifyRequest } from 'fastify';
-import { FindUniqueUserArgs } from 'src/libs/prisma/user/find-unique-user.args';
 import { HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard, TokensOutput } from 'src/Ω/auth';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from 'src/libs/services/mail/mail.service';
-import { User } from 'src/libs/prisma/user/user.model';
-import { UserInputCreate } from './dto/user-create.input';
-import { UserUpdateInput } from 'src/libs/prisma/user/user-update.input';
-import { UserUpdatePasswordInput } from './dto/update-user-password.input';
+import { User } from './dto/user.model';
+import { UpdateUserInput } from './dto/update-user.input';
+import { CreateUserInput } from './dto/create-user.input';
+import { UpdateUserPasswordInput } from './dto/update-user-password.input';
 import { UsersService } from './users.service';
 import { delkeys } from 'src/libs/utils/helpers';
 import { randomBytes } from 'crypto';
@@ -24,12 +23,12 @@ export class UsersResolver {
     private readonly $mail: MailService,
   ) {}
   @Gql.Query(() => User)
-  getUser(@Gql.Args() args: FindUniqueUserArgs) {
-    return this.$users.findUser(args.where);
+  getUser() {
+    return {};
   }
 
   @Gql.Mutation(() => User)
-  async createUser(@Gql.Args('input') input: UserInputCreate) {
+  async createUser(@Gql.Args('input') input: CreateUserInput) {
     const reg = await this.$users.findUser({ email: input.email });
     if (reg) throw new HttpException('EMAIL_BUSY', HttpStatus.CONFLICT);
     const user = await this.$users.createUser(input);
@@ -40,12 +39,12 @@ export class UsersResolver {
   @Gql.Mutation(() => User)
   @UseGuards(JwtAuthGuard)
   async updateUser(
-    @Gql.Args('userUpdateInput') userUpdateInput: UserUpdateInput,
+    @Gql.Args('userUpdateInput') userUpdateInput: UpdateUserInput,
     @Gql.Context() ctx: { req: FastifyRequest },
   ) {
     const token = ExtractJwt.fromAuthHeaderAsBearerToken()(ctx.req);
-    const where = { id: this.$jwt.decode(token).id };
-    const user = await this.$users.updateUser({ where, data: userUpdateInput });
+    const id = this.$jwt.decode(token).id;
+    const user = await this.$users.updateUser({ id, data: userUpdateInput });
     if (!user) throw new HttpException('INCORRECT_USER_DATA', HttpStatus.UNPROCESSABLE_ENTITY);
     return delkeys(user, ['refreshToken', 'password']);
   }
@@ -53,7 +52,7 @@ export class UsersResolver {
   @Gql.Mutation(() => TokensOutput)
   @UseGuards(JwtAuthGuard)
   async updateUserPassword(
-    @Gql.Args('input') input: UserUpdatePasswordInput,
+    @Gql.Args('input') input: UpdateUserPasswordInput,
     @Gql.Context() ctx: { req: FastifyRequest },
   ) {
     const token = ExtractJwt.fromAuthHeaderAsBearerToken()(ctx.req);

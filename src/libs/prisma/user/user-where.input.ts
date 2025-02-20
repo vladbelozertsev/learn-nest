@@ -34,6 +34,9 @@ export class UserWhereInput {
     name?: StringFilter;
 
     @HideField()
+    role?: StringFilter;
+
+    @HideField()
     refreshToken?: StringFilter;
 
     @HideField()

@@ -27,6 +27,9 @@ export class UserGroupBy {
     name!: string;
 
     @HideField()
+    role!: string;
+
+    @HideField()
     refreshToken!: string;
 
     @Field(() => Date, {nullable:false})

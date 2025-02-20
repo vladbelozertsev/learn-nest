@@ -1,13 +1,14 @@
+import { CreateUserInput } from './dto/create-user.input';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/app/prisma.service';
-import { UpdateOneUserArgs } from 'src/libs/prisma/user/update-one-user.args';
-import { UserCreateInput } from 'src/libs/prisma/user/user-create.input';
+import { UpdateUserInput } from './dto/update-user.input';
 import { hash } from 'bcrypt';
+import { wset } from 'src/libs/utils/helpers';
 
 @Injectable()
 export class UsersService {
   constructor(private readonly $prisma: PrismaService) {}
-  async createUser(input: UserCreateInput) {
+  async createUser(input: CreateUserInput) {
     const password = await hash(input.password, 10);
     const data = { ...input, password };
     return this.$prisma.user.create({ data });
@@ -28,16 +29,14 @@ export class UsersService {
     return this.$prisma.user.update({ where: { id }, data: { refreshToken } });
   }
 
-  updateUser(data: UpdateOneUserArgs) {
-    delete data['data']['email'];
-    delete data['data']['emailVerified'];
-    delete data['data']['password'];
-    delete data['data']['refreshToken'];
-    return this.$prisma.user.update(data);
+  updateUser(prams: { id: number; data: UpdateUserInput }) {
+    const where = { id: prams.id };
+    const data = wset(prams.data);
+    return this.$prisma.user.update({ where, data });
   }
 
-  findUser(where: UpdateOneUserArgs['where']) {
-    delete where['password'];
+  findUser(prams: { id?: number; email?: string }) {
+    const where = { id: prams.id, email: prams.email };
     return this.$prisma.user.findFirst({ where });
   }
 }

@@ -34,6 +34,9 @@ export class UserScalarWhereWithAggregatesInput {
     name?: StringWithAggregatesFilter;
 
     @HideField()
+    role?: StringWithAggregatesFilter;
+
+    @HideField()
     refreshToken?: StringWithAggregatesFilter;
 
     @HideField()

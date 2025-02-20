@@ -1,9 +1,8 @@
 import * as V from 'class-validator';
-import { Field, InputType, OmitType } from '@nestjs/graphql';
-import { UserCreateInput } from 'src/libs/prisma/user/user-create.input';
+import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class UserInputCreate extends OmitType(UserCreateInput, ['password', 'email']) {
+export class CreateUserInput {
   @Field(() => String, { nullable: false })
   @V.MinLength(6)
   @V.MaxLength(72)
@@ -14,4 +13,8 @@ export class UserInputCreate extends OmitType(UserCreateInput, ['password', 'ema
   @V.IsEmail()
   @V.IsNotEmpty()
   email!: string;
+
+  @Field(() => String, { nullable: false })
+  @V.IsNotEmpty()
+  name!: string;
 }

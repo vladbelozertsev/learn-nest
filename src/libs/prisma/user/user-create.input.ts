@@ -18,6 +18,9 @@ export class UserCreateInput {
     name!: string;
 
     @HideField()
+    role?: string;
+
+    @HideField()
     refreshToken?: string;
 
     @HideField()

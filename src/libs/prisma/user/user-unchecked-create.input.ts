@@ -22,6 +22,9 @@ export class UserUncheckedCreateInput {
     name!: string;
 
     @HideField()
+    role?: string;
+
+    @HideField()
     refreshToken?: string;
 
     @HideField()
