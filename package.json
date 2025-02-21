@@ -17,11 +17,10 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./__tests__/jest-e2e.json"
   },
   "dependencies": {
     "@apollo/server": "^4.11.3",
-    "@as-integrations/fastify": "^2.1.1",
     "@nestjs-modules/mailer": "^2.0.2",
     "@nestjs/apollo": "^13.0.2",
     "@nestjs/common": "^11.0.5",
@@ -33,7 +32,7 @@
     "@nestjs/microservices": "^11.0.5",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.10",
-    "@nestjs/platform-fastify": "^11.0.5",
+    "@nestjs/serve-static": "^5.0.3",
     "@prisma/client": "^6.3.1",
     "@react-email/components": "0.0.33",
     "bcrypt": "^5.1.1",
@@ -43,9 +42,7 @@
     "graphql": "^16.10.0",
     "graphql-upload": "^17.0.0",
     "graphql-upload-ts": "^2.1.2",
-    "i": "^0.3.7",
     "nodemailer": "^6.10.0",
-    "npm": "^11.1.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",

@@ -1,7 +1,7 @@
-import { CreateUserInput } from './dto/create-user.input';
+import { CreateUserInput } from './schema/create-user.input';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/app/prisma.service';
-import { UpdateUserInput } from './dto/update-user.input';
+import { UpdateUserInput } from './schema/update-user.input';
 import { hash } from 'bcrypt';
 import { wset } from 'src/libs/utils/helpers';
 

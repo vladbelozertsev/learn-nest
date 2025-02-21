@@ -1,8 +1,8 @@
 import { ConfigService } from '@nestjs/config';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { FastifyRequest } from 'fastify';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { Request } from 'express';
 import { Token } from '../types/token.type';
 import { UsersService } from 'src/Ω/users/users.service';
 import { compare } from 'bcrypt';
@@ -19,7 +19,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
       passReqToCallback: true,
     });
   }
-  async validate(req: FastifyRequest, { id, iat }: Token) {
+  async validate(req: Request, { id, iat }: Token) {
     const tokenEncodedReq = ExtractJwt.fromAuthHeaderAsBearerToken()(req).split('.')[2];
     const tokenEncodedDbHash = (await this.$users.findUser({ id })).refreshToken;
     if (!tokenEncodedDbHash) throw new UnauthorizedException('SESSION_EXPIRED');

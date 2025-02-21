@@ -1,1 +1,1 @@
-export { User } from './dto/user.model';
+export { User } from './schema/user.model';

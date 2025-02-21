@@ -1,15 +1,15 @@
 import * as Gql from '@nestjs/graphql';
 import { AuthService } from '../auth/auth.service';
+import { CreateUserInput } from './schema/create-user.input';
 import { ExtractJwt } from 'passport-jwt';
-import { FastifyRequest } from 'fastify';
 import { HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard, TokensOutput } from 'src/Ω/auth';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from 'src/libs/services/mail/mail.service';
-import { User } from './dto/user.model';
-import { UpdateUserInput } from './dto/update-user.input';
-import { CreateUserInput } from './dto/create-user.input';
-import { UpdateUserPasswordInput } from './dto/update-user-password.input';
+import { Request } from 'express';
+import { UpdateUserInput } from './schema/update-user.input';
+import { UpdateUserPasswordInput } from './schema/update-user-password.input';
+import { User } from './schema/user.model';
 import { UsersService } from './users.service';
 import { delkeys } from 'src/libs/utils/helpers';
 import { randomBytes } from 'crypto';
@@ -40,7 +40,7 @@ export class UsersResolver {
   @UseGuards(JwtAuthGuard)
   async updateUser(
     @Gql.Args('userUpdateInput') userUpdateInput: UpdateUserInput,
-    @Gql.Context() ctx: { req: FastifyRequest },
+    @Gql.Context() ctx: { req: Request },
   ) {
     const token = ExtractJwt.fromAuthHeaderAsBearerToken()(ctx.req);
     const id = this.$jwt.decode(token).id;
@@ -53,7 +53,7 @@ export class UsersResolver {
   @UseGuards(JwtAuthGuard)
   async updateUserPassword(
     @Gql.Args('input') input: UpdateUserPasswordInput,
-    @Gql.Context() ctx: { req: FastifyRequest },
+    @Gql.Context() ctx: { req: Request },
   ) {
     const token = ExtractJwt.fromAuthHeaderAsBearerToken()(ctx.req);
     const where = { id: this.$jwt.decode(token).id };

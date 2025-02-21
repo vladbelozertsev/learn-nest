@@ -1,8 +1,8 @@
 import { ConfigService } from '@nestjs/config';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { FastifyRequest } from 'fastify';
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
+import { Request } from 'express';
 import { Token } from '../types/token.type';
 
 @Injectable()
@@ -14,7 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       passReqToCallback: true,
     });
   }
-  async validate(req: FastifyRequest, token: Token) {
+  async validate(req: Request, token: Token) {
     return { req, token };
   }
 }

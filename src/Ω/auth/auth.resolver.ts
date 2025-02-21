@@ -1,16 +1,16 @@
 import * as Gql from '@nestjs/graphql';
 import { AuthService } from './auth.service';
 import { ExtractJwt } from 'passport-jwt';
-import { FastifyRequest } from 'fastify';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { JwtAuthRefreshGuard } from './guards/jwt-auth-refresh.guard';
 import { JwtService } from '@nestjs/jwt';
 import { LocalAuthGuard } from './guards/local-auth.guard';
-import { LoginInput } from './dto/login.input';
-import { LoginOutput } from './dto/login.output';
-import { LogoutOutput } from './dto/logout.output';
+import { LoginInput } from './schema/login.input';
+import { LoginOutput } from './schema/login.output';
+import { LogoutOutput } from './schema/logout.output';
+import { Request } from 'express';
 import { Token } from './types/token.type';
-import { TokensOutput } from './dto/tokens.output';
+import { TokensOutput } from './schema/tokens.output';
 import { UseGuards } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { delkeys } from 'src/libs/utils/helpers';
@@ -44,7 +44,7 @@ export class AuthResolver {
 
   @Gql.Mutation(() => LogoutOutput)
   @UseGuards(JwtAuthGuard)
-  logout(@Gql.Context() ctx: { req: FastifyRequest }) {
+  logout(@Gql.Context() ctx: { req: Request }) {
     const tokenEncoded = ExtractJwt.fromAuthHeaderAsBearerToken()(ctx.req);
     const tokenDecoded = this.$jwt.decode(tokenEncoded) as Token;
     this.$users.updateUserToken({ id: tokenDecoded.id, token: '' });
@@ -53,7 +53,7 @@ export class AuthResolver {
 
   @Gql.Mutation(() => TokensOutput)
   @UseGuards(JwtAuthRefreshGuard)
-  async refreshToken(@Gql.Context() ctx: { req: FastifyRequest }) {
+  async refreshToken(@Gql.Context() ctx: { req: Request }) {
     const tokenEncoded = ExtractJwt.fromAuthHeaderAsBearerToken()(ctx.req);
     const tokenDecoded = this.$jwt.decode(tokenEncoded) as Token;
     const accessToken = this.$auth.getAccessToken(tokenDecoded);

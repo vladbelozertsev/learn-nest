@@ -1,19 +1,23 @@
 {
+  "files.exclude": {
+    // "dist": true,
+    // "node_modules": true
+  },
   "favorites.resources": [
     {
-      "filePath": "src/__app__",
+      "filePath": "src/app",
       "group": "Default"
     },
     {
-      "filePath": "src/__i18n__",
+      "filePath": "src/i18n",
       "group": "Default"
     },
     {
-      "filePath": "src/__libs__",
+      "filePath": "src/libs",
       "group": "Default"
     },
     {
-      "filePath": "src/i18n/asd.json",
+      "filePath": "src/Ω",
       "group": "Default"
     }
   ]

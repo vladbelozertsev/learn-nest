@@ -1,24 +1,25 @@
 import * as admin from 'firebase-admin';
+import * as express from 'express';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { MyGuard } from 'src/libs/guards/my-guard';
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { graphqlUploadExpress } from 'graphql-upload-ts';
+import { join } from 'node:path';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule);
   const config = app.get<ConfigService>(ConfigService);
-  app.enableCors({ origin: 'http://10.0.2.2:3000', credentials: true });
 
   app.use(
     graphqlUploadExpress({
+      overrideSendResponse: false,
       maxFileSize: 10000000,
       maxFiles: 10,
-      overrideSendResponse: false,
     }),
   );
-  app.useGlobalGuards(new MyGuard());
+
+  app.use('/public', express.static(join(__dirname, '../..', 'public'))); // <-
 
   admin.initializeApp({
     credential: admin.credential.cert({
