@@ -1,6 +1,13 @@
-import { Field, HideField } from '@nestjs/graphql';
+import { Field, HideField, Int } from '@nestjs/graphql';
 import { ID } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
+import { PrivateFile } from './private-file.model';
+
+@ObjectType()
+export class UserCount {
+  @Field(() => Int, { nullable: false })
+  files?: number;
+}
 
 @ObjectType()
 export class User {
@@ -13,6 +20,9 @@ export class User {
   @Field(() => Boolean, { defaultValue: false, nullable: false })
   emailVerified!: boolean;
 
+  @Field(() => [PrivateFile], { nullable: true })
+  files?: Array<PrivateFile>;
+
   @Field(() => String, { nullable: false })
   name!: string;
 
@@ -21,6 +31,9 @@ export class User {
 
   @Field(() => Date, { nullable: false })
   updatedAt!: Date;
+
+  @Field(() => UserCount, { nullable: false })
+  _count?: UserCount;
 
   @HideField()
   role!: string;

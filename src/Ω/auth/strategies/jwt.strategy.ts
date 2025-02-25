@@ -14,7 +14,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       passReqToCallback: true,
     });
   }
-  async validate(req: Request, token: Token) {
+  validate(req: Request, token: Token) {
     return { req, token };
   }
 }

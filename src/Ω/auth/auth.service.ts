@@ -3,7 +3,6 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from 'src/libs/services/mail/mail.service';
 import { TokenPayload } from './types/token.type';
-import { UpdateOneUserArgs } from 'src/libs/prisma/user/update-one-user.args';
 import { UsersService } from '../users/users.service';
 import { compare } from 'bcrypt';
 import { delkeys } from 'src/libs/utils/helpers';
@@ -53,8 +52,8 @@ export class AuthService {
   }
 
   // LOGIN_STEP_#3
-  async validateUser(input: { where: UpdateOneUserArgs['where']; password: string }) {
-    const user = await this.$users.findUser(input.where);
+  async validateUser(input: { id?: number; email?: string; password: string }) {
+    const user = await this.$users.findUser(input);
     if (!user) throw new UnauthorizedException('INCORRECT_EMAIL');
     const isValid = await compare(input.password, user.password);
     if (!isValid) throw new UnauthorizedException('INCORRECT_PASSWORD');

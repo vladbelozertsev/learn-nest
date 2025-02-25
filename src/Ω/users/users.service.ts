@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/app/prisma.service';
 import { UpdateUserInput } from './schema/update-user.input';
 import { hash } from 'bcrypt';
-import { wset } from 'src/libs/utils/helpers';
+import { withset } from 'src/libs/utils/helpers';
 
 @Injectable()
 export class UsersService {
@@ -31,7 +31,7 @@ export class UsersService {
 
   updateUser(prams: { id: number; data: UpdateUserInput }) {
     const where = { id: prams.id };
-    const data = wset(prams.data);
+    const data = withset(prams.data);
     return this.$prisma.user.update({ where, data });
   }
 

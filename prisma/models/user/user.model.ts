@@ -1,6 +1,8 @@
 import { Field } from '@nestjs/graphql';
 import { ObjectType } from '@nestjs/graphql';
 import { ID } from '@nestjs/graphql';
+import { PrivateFile } from '../private-file/private-file.model';
+import { UserCount } from './user-count.output';
 
 @ObjectType()
 export class User {
@@ -15,20 +17,26 @@ export class User {
     emailVerified!: boolean;
 
     @Field(() => String, {nullable:false})
-    password!: string;
-
-    @Field(() => String, {nullable:false})
     name!: string;
 
-    @Field(() => String, {defaultValue:'user',nullable:false})
-    role!: string;
+    @Field(() => String, {nullable:false})
+    password!: string;
 
     @Field(() => String, {defaultValue:'',nullable:false})
     refreshToken!: string;
 
-    @Field(() => Date, {nullable:false})
-    createdAt!: Date;
+    @Field(() => String, {defaultValue:'user',nullable:false})
+    role!: string;
 
     @Field(() => Date, {nullable:false})
     updatedAt!: Date;
+
+    @Field(() => Date, {nullable:false})
+    createdAt!: Date;
+
+    @Field(() => [PrivateFile], {nullable:true})
+    files?: Array<PrivateFile>;
+
+    @Field(() => UserCount, {nullable:false})
+    _count?: UserCount;
 }

@@ -20,12 +20,12 @@ export const isObj = (v: any) => {
 };
 
 export const isDev = ($config: ConfigService) => {
-  const MODE = $config.getOrThrow('MODE');
+  const MODE = $config.getOrThrow<string>('MODE');
   return MODE === 'DEVELOPMENT';
 };
 
-export const wset = (prams: { [key: string]: any }) => {
-  const arr = Object.entries(prams);
+export const withset = <T>(prams: T) => {
+  const arr = Object.entries(!!prams && typeof prams === 'object' ? prams : {});
   const entries = arr.map((el) => [el[0], { set: el[1] }]);
-  return Object.fromEntries(entries);
+  return Object.fromEntries(entries) as { [Key in keyof T]: { set: T[Key] } };
 };

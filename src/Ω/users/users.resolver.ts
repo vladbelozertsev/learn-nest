@@ -3,10 +3,12 @@ import { AuthService } from '../auth/auth.service';
 import { CreateUserInput } from './schema/create-user.input';
 import { ExtractJwt } from 'passport-jwt';
 import { HttpException, HttpStatus, UseGuards } from '@nestjs/common';
-import { JwtAuthGuard, TokensOutput } from 'src/Ω/auth';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from 'src/libs/services/mail/mail.service';
 import { Request } from 'express';
+import { Token } from '../auth/types/token.type';
+import { TokensOutput } from '../auth/schema/tokens.output';
 import { UpdateUserInput } from './schema/update-user.input';
 import { UpdateUserPasswordInput } from './schema/update-user-password.input';
 import { User } from './schema/user.model';
@@ -43,9 +45,9 @@ export class UsersResolver {
     @Gql.Context() ctx: { req: Request },
   ) {
     const token = ExtractJwt.fromAuthHeaderAsBearerToken()(ctx.req);
-    const id = this.$jwt.decode(token).id;
+    const id = this.$jwt.decode<Token>(token!).id;
     const user = await this.$users.updateUser({ id, data: userUpdateInput });
-    if (!user) throw new HttpException('INCORRECT_USER_DATA', HttpStatus.UNPROCESSABLE_ENTITY);
+    if (!user?.id) throw new HttpException('INCORRECT_USER_DATA', HttpStatus.UNPROCESSABLE_ENTITY);
     return delkeys(user, ['refreshToken', 'password']);
   }
 
@@ -56,7 +58,7 @@ export class UsersResolver {
     @Gql.Context() ctx: { req: Request },
   ) {
     const token = ExtractJwt.fromAuthHeaderAsBearerToken()(ctx.req);
-    const where = { id: this.$jwt.decode(token).id };
+    const where = { id: this.$jwt.decode<Token>(token!).id };
 
     const updateUserPassword = async (user: { id: number; password: string }) => {
       const accessToken = this.$auth.getAccessToken({ id: user.id });
@@ -66,14 +68,14 @@ export class UsersResolver {
     };
 
     if (!input.password || !input.passwordUpd) {
-      const { email } = await this.$users.findUser(where);
+      const email = await this.$users.findUser(where).then((r) => r?.email);
       if (!email) throw new HttpException('INCORRECT_WHERE', HttpStatus.UNPROCESSABLE_ENTITY);
       const password = randomBytes(15).toString('base64');
       await this.$mail.resetPassword({ email, password });
       return updateUserPassword({ id: where.id, password });
     }
 
-    const user = await this.$auth.validateUser({ where, password: input.password });
+    const user = await this.$auth.validateUser({ id: where.id, password: input.password });
     if (!user) throw new HttpException('INCORRECT_WHERE', HttpStatus.UNPROCESSABLE_ENTITY);
     return updateUserPassword({ id: user.id, password: input.passwordUpd });
   }

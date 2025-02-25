@@ -19,21 +19,21 @@ async function bootstrap() {
     }),
   );
 
-  app.use('/public', express.static(join(__dirname, '../..', 'public'))); // <-
+  app.use('/public', express.static(join(__dirname, '..', '..', 'public'))); // <-
 
   admin.initializeApp({
     credential: admin.credential.cert({
-      projectId: config.get('FIREBASE_PROJECT_ID'),
-      clientEmail: config.get('FIREBASE_CLIENT_EMAIL'),
-      privateKey: config.get('FIREBASE_PRIVATE_KEY').replace(/\\n/g, '\n'),
+      projectId: config.getOrThrow<string>('FIREBASE_PROJECT_ID'),
+      clientEmail: config.getOrThrow<string>('FIREBASE_CLIENT_EMAIL'),
+      privateKey: config.getOrThrow<string>('FIREBASE_PRIVATE_KEY').replace(/\\n/g, '\n'),
     }),
   });
 
-  app.setGlobalPrefix('api');
+  app.setGlobalPrefix('api', { exclude: ['public', 'private'] });
   app.useGlobalPipes(new ValidationPipe());
   await app.listen(3000);
 }
-bootstrap();
+bootstrap().catch(console.error);
 
 /**
  * Заметки:

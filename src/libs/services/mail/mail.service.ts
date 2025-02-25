@@ -4,6 +4,8 @@ import { ResetPasswordTpl } from './templates/reset-password.template';
 import { VerifyEmailTpl } from './templates/verify-email.template';
 import { render } from '@react-email/components';
 
+export type Info = Promise<{ success: true }>;
+
 @Injectable()
 export class MailService {
   constructor(private readonly $mailer: MailerService) {}
@@ -11,7 +13,7 @@ export class MailService {
     const { password, email } = data;
     const subject = 'Сброс пароля';
     const html = await render(ResetPasswordTpl({ password }));
-    return this.sendMail({ email, subject, html });
+    return await this.sendMail({ email, subject, html });
   }
 
   async verifyEmail(data: { link: string; email: string; token?: string }) {
@@ -21,11 +23,16 @@ export class MailService {
     return this.sendMail({ email, subject, html });
   }
 
-  private sendMail(prams: { email: string; subject: string; html: string }) {
-    return this.$mailer.sendMail({
+  private async sendMail(prams: {
+    email: string;
+    subject: string;
+    html: string;
+  }): Promise<{ success: true }> {
+    await this.$mailer.sendMail({
       to: prams.email,
       subject: prams.subject,
       html: prams.html,
     });
+    return { success: true };
   }
 }

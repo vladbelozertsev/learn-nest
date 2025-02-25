@@ -12,6 +12,7 @@ import { Request } from 'express';
 import { Token } from './types/token.type';
 import { TokensOutput } from './schema/tokens.output';
 import { UseGuards } from '@nestjs/common';
+import { User } from '../users/schema/user.model';
 import { UsersService } from '../users/users.service';
 import { delkeys } from 'src/libs/utils/helpers';
 
@@ -26,7 +27,7 @@ export class AuthResolver {
   // LOGIN_STEP_#4
   @Gql.Mutation(() => LoginOutput)
   @UseGuards(LocalAuthGuard)
-  async login(@Gql.Args('input') _: LoginInput, @Gql.Context() ctx) {
+  async login(@Gql.Args('input') _: LoginInput, @Gql.Context() ctx: { user: User }) {
     const accessToken = this.$auth.getAccessToken(ctx.user);
     const refreshToken = this.$auth.getRefreshToken(ctx.user);
 
@@ -44,10 +45,10 @@ export class AuthResolver {
 
   @Gql.Mutation(() => LogoutOutput)
   @UseGuards(JwtAuthGuard)
-  logout(@Gql.Context() ctx: { req: Request }) {
+  async logout(@Gql.Context() ctx: { req: Request }) {
     const tokenEncoded = ExtractJwt.fromAuthHeaderAsBearerToken()(ctx.req);
-    const tokenDecoded = this.$jwt.decode(tokenEncoded) as Token;
-    this.$users.updateUserToken({ id: tokenDecoded.id, token: '' });
+    const tokenDecoded = this.$jwt.decode<Token>(tokenEncoded!);
+    await this.$users.updateUserToken({ id: tokenDecoded.id, token: '' });
     return { message: 'SUCCESS_LOGOUT' };
   }
 
@@ -55,7 +56,7 @@ export class AuthResolver {
   @UseGuards(JwtAuthRefreshGuard)
   async refreshToken(@Gql.Context() ctx: { req: Request }) {
     const tokenEncoded = ExtractJwt.fromAuthHeaderAsBearerToken()(ctx.req);
-    const tokenDecoded = this.$jwt.decode(tokenEncoded) as Token;
+    const tokenDecoded = this.$jwt.decode<Token>(tokenEncoded!);
     const accessToken = this.$auth.getAccessToken(tokenDecoded);
     const refreshToken = this.$auth.getRefreshToken(tokenDecoded);
 

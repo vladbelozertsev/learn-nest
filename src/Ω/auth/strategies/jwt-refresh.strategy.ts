@@ -20,14 +20,14 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'jwt-refresh'
     });
   }
   async validate(req: Request, { id, iat }: Token) {
-    const tokenEncodedReq = ExtractJwt.fromAuthHeaderAsBearerToken()(req).split('.')[2];
-    const tokenEncodedDbHash = (await this.$users.findUser({ id })).refreshToken;
+    const tokenEncodedReq = ExtractJwt.fromAuthHeaderAsBearerToken()(req)?.split('.')[2];
+    const tokenEncodedDbHash = (await this.$users.findUser({ id }))?.refreshToken;
     if (!tokenEncodedDbHash) throw new UnauthorizedException('SESSION_EXPIRED');
-    const isValid = await compare(tokenEncodedReq, tokenEncodedDbHash);
+    const isValid = await compare(tokenEncodedReq!, tokenEncodedDbHash);
     if (!isValid) throw new UnauthorizedException('INVALID_TOKEN');
-    const time = this.$config.getOrThrow('JWT_ACCESS_TOKEN_LIFE_TIME_S');
+    const time = this.$config.getOrThrow<number>('JWT_ACCESS_TOKEN_LIFE_TIME_S');
     if (Math.round(Date.now() / 1000) - iat > time) return { req };
-    this.$users.updateUserToken({ id, token: '' });
+    await this.$users.updateUserToken({ id, token: '' });
     throw new UnauthorizedException('SUSPICIOUS_ACTIVITY');
   }
 }

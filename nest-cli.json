@@ -4,7 +4,6 @@
   "sourceRoot": "src",
   "entryFile": "app/main",
   "compilerOptions": {
-    "deleteOutDir": true,
-    "assets": [{ "include": "i18n/**/*", "watchAssets": true }]
+    "deleteOutDir": true
   }
 }
